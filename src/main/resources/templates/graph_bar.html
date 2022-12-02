@@ -28,19 +28,19 @@
                     type: 'column'
                 },
                 title: {
-                    text: 'Organization'
+                    text: [[${ about }]]
                 },
                 subtitle: {
-                    text: 'Details'
+                    text: [[${ detail }]]
                 },
                 xAxis: {
-                    categories: [[${ estado }]],
+                    categories: [[${ columns }]],
                     crosshair: true
                 },
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Age'
+                        text: 'Quantidade de alunos'
                     }
                 },
                 tooltip: {
@@ -58,8 +58,8 @@
                     }
                 },
                 series: [{
-                    name: 'Name',
-                    data: [[${ id }]]
+                    name: [[${ description_columns }]],
+                    data: [[${ age }]]
                 }]
             });
         });
