@@ -33,8 +33,8 @@ public class BarController {
 
     private boolean notFoundAlunos;
 
-    private void setOptionsFilter(){
-        List<Alunos> alunosList = service.getAllAlunos();
+    private void setOptionsFilter() {
+        final List<Alunos> alunosList = service.getAllAlunos();
         etniasList = alunosList.stream()
                 .map(x -> x.getEtnia()).distinct().collect(Collectors.toList());
 
@@ -45,7 +45,7 @@ public class BarController {
                 .map(x -> x.getEscola_origem()).distinct().collect(Collectors.toList());
     }
 
-    private Model getDefaultOptions(Model model){
+    private Model getDefaultOptions(final Model model) {
         model.addAttribute(NamesHelper.ETNIAS_OPTIONS, etniasList);
         model.addAttribute(NamesHelper.SEXO_OPTIONS, sexoList);
         model.addAttribute(NamesHelper.ESCOLAS_OPTIONS, escolaList);
@@ -57,16 +57,16 @@ public class BarController {
     }
 
     @GetMapping("/etnia")
-    private String getAllAlunos(Model model){
+    private String getAllAlunos(Model model) {
         setOptionsFilter();
         model = getDefaultOptions(model);
-        List<Alunos> alunosList = (filterAlunos != null && !filterAlunos.isEmpty())
+        final List<Alunos> alunosList = (filterAlunos != null && !filterAlunos.isEmpty())
                 ? filterAlunos : service.getAllAlunos();
-        List<String> etniaList = alunosList.stream()
+        final List<String> etniaList = alunosList.stream()
                 .map(x -> x.getEtnia()).distinct().sorted().collect(Collectors.toList());
 
-        List<Integer> quantidadePorEtnia = new ArrayList<>();
-        for (String etnia : etniaList) {
+        final List<Integer> quantidadePorEtnia = new ArrayList<>();
+        for (final String etnia : etniaList) {
             quantidadePorEtnia.add(alunosList.stream()
                     .filter(alunos -> alunos.getEtnia().equalsIgnoreCase(etnia))
                     .collect(Collectors.toList()).size());
@@ -88,15 +88,16 @@ public class BarController {
     }
 
     @GetMapping("/sexo")
-    private String filterSexo(Model model){
+    private String filterSexo(Model model) {
+        setOptionsFilter();
         model = getDefaultOptions(model);
-        List<Alunos> alunosList = (filterAlunos != null && !filterAlunos.isEmpty())
+        final List<Alunos> alunosList = (filterAlunos != null && !filterAlunos.isEmpty())
                 ? filterAlunos : service.getAllAlunos();
 
-        List<String> sexoList = alunosList.stream()
+        final List<String> sexoList = alunosList.stream()
                 .map(x -> x.getSexo()).distinct().sorted().collect(Collectors.toList());
-        List<Integer> quantidadePorSexo = new ArrayList<>();
-        for (String sexo : sexoList) {
+        final List<Integer> quantidadePorSexo = new ArrayList<>();
+        for (final String sexo : sexoList) {
             quantidadePorSexo.add(alunosList.stream()
                     .filter(alunos -> alunos.getSexo().equalsIgnoreCase(sexo))
                     .collect(Collectors.toList()).size());
@@ -115,14 +116,16 @@ public class BarController {
     }
 
     @GetMapping("/escola")
-    private String filterEscola(Model model){
+    private String filterEscola(Model model) {
+        setOptionsFilter();
         model = getDefaultOptions(model);
-        List<Alunos> alunosList = service.getAllAlunos();
-        List<String> escolaList = alunosList.stream()
+        final List<Alunos> alunosList = (filterAlunos != null && !filterAlunos.isEmpty())
+                ? filterAlunos : service.getAllAlunos();
+        final List<String> escolaList = alunosList.stream()
                 .map(x -> x.getEscola_origem()).sorted().distinct().collect(Collectors.toList());
 
-        List<Integer> quantidadePorEscola = new ArrayList<>();
-        for (String escola : escolaList) {
+        final List<Integer> quantidadePorEscola = new ArrayList<>();
+        for (final String escola : escolaList) {
             quantidadePorEscola.add(alunosList.stream()
                     .filter(alunos -> alunos.getEscola_origem().equalsIgnoreCase(escola))
                     .collect(Collectors.toList()).size());
@@ -141,34 +144,34 @@ public class BarController {
     }
 
     @PostMapping("/filtrar/{current-page}")
-    private String filterByParam(@RequestParam("sexo-op") String sexo,
-                                 @RequestParam("etnia-op") String etnia,
-                                 @RequestParam("escola-op") String escola,
-                                 @PathVariable("current-page") String page){
+    private String filterByParam(@RequestParam("sexo-op") final String sexo,
+                                 @RequestParam("etnia-op") final String etnia,
+                                 @RequestParam("escola-op") final String escola,
+                                 @PathVariable("current-page") final String page) {
         List<Alunos> filtro = null;
         sexoSelecionado = sexo;
         etniaSelecionado = etnia;
         escolaSelecionado = escola;
         try {
             filtro = service.getAllAlunos();
-            if(sexo != null && !sexo.isEmpty()){
+            if (sexo != null && !sexo.isEmpty()) {
                 filtro = filtro.stream()
                         .filter(x -> x.getSexo().equalsIgnoreCase(sexo))
                         .collect(Collectors.toList());
             }
 
-            if(etnia != null && !etnia.isEmpty()){
+            if (etnia != null && !etnia.isEmpty()) {
                 filtro = filtro.stream()
                         .filter(x -> x.getEtnia().equalsIgnoreCase(etnia))
                         .collect(Collectors.toList());
             }
 
-            if(escola != null && !escola.isEmpty()){
+            if (escola != null && !escola.isEmpty()) {
                 filtro = filtro.stream()
                         .filter(x -> x.getEscola_origem().equalsIgnoreCase(escola))
                         .collect(Collectors.toList());
             }
-        }catch (Exception ex){
+        } catch (final Exception ex) {
             System.out.println(ex.getMessage());
         }
         filterAlunos = (!filtro.isEmpty()) ? filtro : null;
@@ -177,7 +180,7 @@ public class BarController {
     }
 
     @GetMapping("/reset-filter/{current-page}")
-    public String resetFilter(@PathVariable("current-page") String page){
+    public String resetFilter(@PathVariable("current-page") final String page) {
         sexoSelecionado = "";
         etniaSelecionado = "";
         escolaSelecionado = "";
