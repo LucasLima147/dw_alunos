@@ -19,6 +19,7 @@ public class BarController {
 
     @Autowired
     private AlunosService service;
+    private final String NAME_FILE = "graph_bar";
 
     private List<Alunos> filterAlunos = null;
 
@@ -62,11 +63,13 @@ public class BarController {
         List<Alunos> alunosList = (filterAlunos != null && !filterAlunos.isEmpty())
                 ? filterAlunos : service.getAllAlunos();
         List<String> etniaList = alunosList.stream()
-                .map(x -> x.getEtnia()).distinct().collect(Collectors.toList());
+                .map(x -> x.getEtnia()).distinct().sorted().collect(Collectors.toList());
 
         List<Integer> quantidadePorEtnia = new ArrayList<>();
         for (String etnia : etniaList) {
-            quantidadePorEtnia.add(alunosList.stream().filter(alunos -> alunos.getEtnia().equalsIgnoreCase(etnia)).collect(Collectors.toList()).size());
+            quantidadePorEtnia.add(alunosList.stream()
+                    .filter(alunos -> alunos.getEtnia().equalsIgnoreCase(etnia))
+                    .collect(Collectors.toList()).size());
         }
 
         System.out.println(etniaList);
@@ -77,10 +80,11 @@ public class BarController {
         model.addAttribute(NamesHelper.COLUMM_PARAM, etniaList);
         model.addAttribute(NamesHelper.COLUMNS_DECRIPTION, "Etnias");
         model.addAttribute(NamesHelper.AMOUNT_PARAM, quantidadePorEtnia);
+        model.addAttribute(NamesHelper.CURRENT_PAGE, "etnia");
 
         model.addAttribute("not-found", notFoundAlunos);
         notFoundAlunos = false;
-        return "graph_bar";
+        return NAME_FILE;
     }
 
     @GetMapping("/sexo")
@@ -90,10 +94,12 @@ public class BarController {
                 ? filterAlunos : service.getAllAlunos();
 
         List<String> sexoList = alunosList.stream()
-                .map(x -> x.getSexo()).distinct().collect(Collectors.toList());
+                .map(x -> x.getSexo()).distinct().sorted().collect(Collectors.toList());
         List<Integer> quantidadePorSexo = new ArrayList<>();
         for (String sexo : sexoList) {
-            quantidadePorSexo.add(alunosList.stream().filter(alunos -> alunos.getSexo().equalsIgnoreCase(sexo)).collect(Collectors.toList()).size());
+            quantidadePorSexo.add(alunosList.stream()
+                    .filter(alunos -> alunos.getSexo().equalsIgnoreCase(sexo))
+                    .collect(Collectors.toList()).size());
         }
 
         System.out.println(sexoList);
@@ -104,7 +110,8 @@ public class BarController {
         model.addAttribute(NamesHelper.COLUMM_PARAM, sexoList);
         model.addAttribute(NamesHelper.COLUMNS_DECRIPTION, "Sexo");
         model.addAttribute(NamesHelper.AMOUNT_PARAM, quantidadePorSexo);
-        return "graph_bar";
+        model.addAttribute(NamesHelper.CURRENT_PAGE, "sexo");
+        return NAME_FILE;
     }
 
     @GetMapping("/escola")
@@ -112,11 +119,13 @@ public class BarController {
         model = getDefaultOptions(model);
         List<Alunos> alunosList = service.getAllAlunos();
         List<String> escolaList = alunosList.stream()
-                .map(x -> x.getEscola_origem()).distinct().collect(Collectors.toList());
+                .map(x -> x.getEscola_origem()).sorted().distinct().collect(Collectors.toList());
 
         List<Integer> quantidadePorEscola = new ArrayList<>();
         for (String escola : escolaList) {
-            quantidadePorEscola.add(alunosList.stream().filter(alunos -> alunos.getEscola_origem().equalsIgnoreCase(escola)).collect(Collectors.toList()).size());
+            quantidadePorEscola.add(alunosList.stream()
+                    .filter(alunos -> alunos.getEscola_origem().equalsIgnoreCase(escola))
+                    .collect(Collectors.toList()).size());
         }
 
         System.out.println(escolaList);
@@ -127,13 +136,15 @@ public class BarController {
         model.addAttribute(NamesHelper.COLUMM_PARAM, escolaList);
         model.addAttribute(NamesHelper.COLUMNS_DECRIPTION, "Tipo de escola que estudaram");
         model.addAttribute(NamesHelper.AMOUNT_PARAM, quantidadePorEscola);
-        return "graph_bar";
+        model.addAttribute(NamesHelper.CURRENT_PAGE, "escola");
+        return NAME_FILE;
     }
 
-    @PostMapping("/filtrar")
+    @PostMapping("/filtrar/{current-page}")
     private String filterByParam(@RequestParam("sexo-op") String sexo,
                                  @RequestParam("etnia-op") String etnia,
-                                     @RequestParam("escola-op") String escola){
+                                 @RequestParam("escola-op") String escola,
+                                 @PathVariable("current-page") String page){
         List<Alunos> filtro = null;
         sexoSelecionado = sexo;
         etniaSelecionado = etnia;
@@ -162,16 +173,16 @@ public class BarController {
         }
         filterAlunos = (!filtro.isEmpty()) ? filtro : null;
         notFoundAlunos = (filterAlunos != null && filterAlunos.size() > 0);
-        return "redirect:/graph_bar/etnia";
+        return "redirect:/graph_bar/" + page;
     }
 
-    @GetMapping("/reset-filter")
-    public String resetFilter(){
+    @GetMapping("/reset-filter/{current-page}")
+    public String resetFilter(@PathVariable("current-page") String page){
         sexoSelecionado = "";
         etniaSelecionado = "";
         escolaSelecionado = "";
 
         filterAlunos = null;
-        return "redirect:/graph_bar/etnia";
+        return "redirect:/graph_bar/" + page;
     }
 }

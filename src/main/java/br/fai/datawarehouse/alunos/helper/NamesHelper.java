@@ -15,4 +15,6 @@ public class NamesHelper {
     public static String ETNIAS_SELECIONADA = "etnias_selecioanda";
     public static String SEXO_SELECIONADA = "sexo_selecioanda";
     public static String ESCOLAS_SELECIONADA = "escola_selecioanda";
+
+    public static String CURRENT_PAGE = "page";
 }

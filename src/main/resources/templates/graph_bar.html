@@ -2,92 +2,269 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords"
+        content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, Flexy lite admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, Flexy admin lite design, Flexy admin lite dashboard bootstrap 5 dashboard template">
+    <meta name="description"
+        content="Flexy Admin Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Analise DW</title>
+    <link rel="canonical" href="https://www.wrappixel.com/templates/Flexy-admin-lite/" />
+    <!-- Favicon icon -->
+    <!-- Custom CSS -->
+    <link href="../assets/libs/chartist/dist/chartist.min.css" rel="stylesheet">
+    <link href="../assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../dist/css/style.min.css" rel="stylesheet">
+
+    <!--GRÁFICO -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
 </head>
 
 <body>
-    <div>
-        <form th:action="@{/graph_bar/filtrar}" method="post">
-            <select name="etnia-op" id="sexo-select">
-                <option value="">Selecione uma opção...</option>
-                <option th:each="etnia : ${etnias_options}" th:value="${etnia}"
-                    th:selected="${etnia==etnias_selecioanda}" th:text="${etnia}"></option>
-            </select>
-            <br>
-            <select name="sexo-op" id="sexo-select">
-                <option value="">Selecione uma opção...</option>
-                <option th:each="sexo : ${sexo_options}" th:value="${sexo}" th:text="${sexo}"
-                    th:selected="${sexo==sexo_selecioanda}"></option>
-            </select>
-            <br>
-            <select name="escola-op" id="sexo-select">
-                <option value="">Selecione uma opção...</option>
-                <option th:each="escola : ${escola_options}" th:value="${escola}" th:text="${escola}"
-                    th:selected="${escola==escola_selecioanda}"></option>
-            </select>
-            <br>
-            <button type="submit">Filtrar</button>
-        </form>
-        <a th:href="@{/graph_bar/reset-filter}">resetar filtro</a>
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="lds-ripple">
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
     </div>
-    <hr>
-    <div class="container">
-        <h2 align="center">Gráficos Liminha</h2>
-        <div id="container" style="width: 550px; height: 400px; margin: 0 auto"></div>
-    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full" data-sidebar-position="absolute"
+        data-header-position="absolute" data-boxed-layout="full">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
 
-    <script th:inline="javascript">
-        $(function () {
-            Highcharts.chart('container', {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: [[${ about }]]
-                },
-                subtitle: {
-                    text: [[${ detail }]]
-                },
-                xAxis: {
-                    categories: [[${ columns }]],
-                    crosshair: true
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Quantidade de alunos'
-                    }
-                },
-                tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                        '<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0
-                    }
-                },
-                series: [{
-                    name: [[${ description_columns }]],
-                    data: [[${ amount }]]
-                }]
-            });
-        });
-    </script>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="page-breadcrumb">
+                <div class="row align-items-center">
+                    <div class="col-6">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0 d-flex align-items-center">
+                                <li class="breadcrumb-item"><a th:href="@{/graph_bar/etnia}" class="link"><i
+                                            class="mdi mdi-home-outline fs-4"></i></a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                            </ol>
+                        </nav>
+                        <h1 class="fw-bold btn btn-info text-white btn-lg ms-5 mt-2">Análise do Datawarehouse</h1>
+                    </div>
+
+                </div>
+            </div>
+
+            <form th:action="@{/graph_bar/filtrar/{currentPage} (currentPage = ${page})}" method="post">
+                <div class="col-12 d-flex justify-content-center">
+                    <div class="col-xl-1 me-5">
+                        <div class="col-12">
+                            <label for="">Sexo</label>
+                            <select class="form-select" name="sexo-op" id="etnia-id-op">
+                                <option value="">Selecione</option>
+                                <option th:each="sexo : ${sexo_options}" th:value="${sexo}" th:text="${sexo}"
+                                    th:selected="${sexo==sexo_selecioanda}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-1 me-5">
+                        <div class="col-12">
+                            <label for="etnia-id-op">Etnia</label>
+                            <select class="form-select" name="etnia-op" id="etnia-id-op">
+                                <option value="">Selecione</option>
+                                <option th:each="etnia : ${etnias_options}" th:value="${etnia}"
+                                    th:selected="${etnia==etnias_selecioanda}" th:text="${etnia}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-1">
+                        <div class="col-12">
+                            <label for="escola-id-op">Escolaridade</label>
+                            <select class="form-select" name="escola-op" id="escola-id-op">
+                                <option value="">Selecione</option>
+                                <option th:each="escola : ${escola_options}" th:value="${escola}" th:text="${escola}"
+                                    th:selected="${escola==escola_selecioanda}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 d-flex justify-content-center mt-2">
+                    <button type="submit" class="btn btn-success col-2 me-5 text-white fw-bold">Filtrar</button>
+                    <a th:href="@{/graph_bar/reset-filter/{currentPage} (currentPage = ${page})}"
+                        class="btn btn-danger col-2 text-white fw-bold">Limpar
+                        Filtro</a>
+                </div>
+            </form>
+
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Sales chart -->
+                <!-- ============================================================== -->
+                <div class="row">
+
+                    <div class="col-lg-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Visão Geral</h4>
+                                <div class="mt-3 pb-3 d-flex align-items-center">
+                                    <div class="ms-3">
+                                        <h5 class="mb-0 fw-bold"><a th:href="@{/graph_bar/etnia}">Etnia</a></h5>
+                                    </div>
+                                </div>
+                                <div class="mt-3 pb-3 d-flex align-items-center">
+                                    <div class="ms-3">
+                                        <h5 class="mb-0 fw-bold"><a th:href="@{/graph_bar/sexo}">Sexo</a></h5>
+                                    </div>
+                                </div>
+                                <div class="mt-3 pb-3 d-flex align-items-center">
+                                    <div class="ms-3">
+                                        <h5 class="mb-0 fw-bold"><a th:href="@{/graph_bar/escola}">Escolaridade</a></h5>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="col-lg-9">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-md-flex align-items-center">
+                                    <div class="container">
+                                        <div id="container" style="width: 100%; height: 500px; margin: 0 auto"></div>
+                                    </div>
+
+                                    <script th:inline="javascript">
+                                        $(function () {
+                                            Highcharts.chart('container', {
+                                                chart: {
+                                                    type: 'column'
+                                                },
+                                                title: {
+                                                    text: [[${ about }]]
+                                                },
+                                                subtitle: {
+                                                    text: [[${ detail }]]
+                                                },
+                                                xAxis: {
+                                                    categories: [[${ columns }]],
+                                                    crosshair: true
+                                                },
+                                                yAxis: {
+                                                    min: 0,
+                                                    title: {
+                                                        text: 'Quantidade de alunos'
+                                                    }
+                                                },
+                                                tooltip: {
+                                                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                                                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                                        '<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
+                                                    footerFormat: '</table>',
+                                                    shared: true,
+                                                    useHTML: true
+                                                },
+                                                plotOptions: {
+                                                    column: {
+                                                        pointPadding: 0.2,
+                                                        borderWidth: 0
+                                                    }
+                                                },
+                                                series: [{
+                                                    name: [[${ description_columns }]],
+                                                    data: [[${ amount }]]
+                                                }]
+                                            });
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- ============================================================== -->
+                <!-- Sales chart -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Table -->
+
+                <!-- ============================================================== -->
+                <!-- Recent comment and chats -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <footer class="footer text-center">
+                <p>Análise de Datawarehouse</p>
+            </footer>
+            <!-- ============================================================== -->
+            <!-- End footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../dist/js/app-style-switcher.js"></script>
+    <!--Wave Effects -->
+    <script src="../dist/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="../dist/js/sidebarmenu.js"></script>
+    <!--Custom JavaScript -->
+    <script src="../dist/js/custom.js"></script>
+    <!--This page JavaScript -->
+    <!--chartis chart-->
+    <script src="../assets/libs/chartist/dist/chartist.min.js"></script>
+    <script src="../assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+    <script src="../dist/js/pages/dashboards/dashboard1.js"></script>
 </body>
 
 </html>
