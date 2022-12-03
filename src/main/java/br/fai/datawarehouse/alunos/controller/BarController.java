@@ -57,7 +57,7 @@ public class BarController {
     }
 
     @GetMapping("/etnia")
-    private String getAllAlunos(Model model) {
+    private String filterEtnia(Model model) {
         setOptionsFilter();
         model = getDefaultOptions(model);
         final List<Alunos> alunosList = (filterAlunos != null && !filterAlunos.isEmpty())
